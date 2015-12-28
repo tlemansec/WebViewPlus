@@ -20,7 +20,7 @@ public class WebViewPlusClient extends WebViewClient {
     protected WebViewStateListener mWebViewStateListener;
     protected UrlLoadingState mUrlLoadingState = UrlLoadingState.NOT_LOADED;
 
-    private final String TAG = WebViewPlusClient.class.getSimpleName();
+    private static final String TAG = WebViewPlusClient.class.getSimpleName();
 
     //endregion
 
@@ -35,15 +35,16 @@ public class WebViewPlusClient extends WebViewClient {
      * @param favicon The favicon for this page if it already exists in the database.
      */
     @Override
-    public void onPageStarted (WebView view, String url, Bitmap favicon){
+    public void onPageStarted(WebView view, String url, Bitmap favicon) {
         Log.d(TAG, "onPageStarted: " + url);
 
         super.onPageStarted(view, url, favicon);
 
         mUrlLoadingState = UrlLoadingState.IS_LOADING;
 
-        if(mWebViewStateListener != null)
+        if (mWebViewStateListener != null) {
             mWebViewStateListener.onStartLoading(url, favicon);
+        }
     }
 
     /**
@@ -53,17 +54,18 @@ public class WebViewPlusClient extends WebViewClient {
      * @param url The url of the page.
      */
     @Override
-    public void onPageFinished (final WebView view, String url){
+    public void onPageFinished(final WebView view, String url) {
         Log.d(TAG, "onPageFinished: " + url);
 
         super.onPageFinished(view, url);
 
-        if(UrlLoadingState.IS_LOADING.equals(mUrlLoadingState)) {
+        if (UrlLoadingState.IS_LOADING.equals(mUrlLoadingState)) {
             mUrlLoadingState = UrlLoadingState.SUCCESFULLY_LOADED;
         }
 
-        if(mWebViewStateListener != null)
+        if (mWebViewStateListener != null) {
             mWebViewStateListener.onFinishLoaded(url);
+        }
     }
 
     /**
@@ -74,7 +76,7 @@ public class WebViewPlusClient extends WebViewClient {
      * @param error The SSL error object.
      */
     @Override
-    public void onReceivedSslError (WebView view, SslErrorHandler handler, SslError error){
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
         Log.e(TAG, "onReceivedSslError: " + error);
 
         handler.proceed();
@@ -86,19 +88,20 @@ public class WebViewPlusClient extends WebViewClient {
      * @param view The WebView that is initiating the callback.
      * @param errorCode The originating request.
      * @param description Information about the error occured.
-     * @param failingUrl The url that failed to load.
+     * @param url The url that failed to load.
      */
     @Override
-    public void onReceivedError (WebView view, int errorCode, String description, String failingUrl){
-        Log.e(TAG, "onReceivedError: " + failingUrl + " | description: " + description +
-                " | errorCode: " + errorCode);
+    public void onReceivedError(WebView view, int errorCode, String description, String url) {
+        Log.e(TAG, "onReceivedError: " + url + " | description: " + description
+                + " | errorCode: " + errorCode);
 
-        super.onReceivedError(view, errorCode, description, failingUrl);
+        super.onReceivedError(view, errorCode, description, url);
 
         mUrlLoadingState = UrlLoadingState.FAILED_LOADING;
 
-        if(mWebViewStateListener != null)
-            mWebViewStateListener.onError(errorCode, description, failingUrl);
+        if (mWebViewStateListener != null) {
+            mWebViewStateListener.onError(errorCode, description, url);
+        }
     }
 
     //endregion

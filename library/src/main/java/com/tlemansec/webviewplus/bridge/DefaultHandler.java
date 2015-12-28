@@ -11,7 +11,7 @@ public class DefaultHandler implements BridgeHandler {
 
     //region Attributes
 
-    private final String TAG = "DefaultHandler";
+    private static final String TAG = DefaultHandler.class.getSimpleName();
 
     //endregion
 
@@ -20,7 +20,7 @@ public class DefaultHandler implements BridgeHandler {
 
     @Override
     public void handler(String data, CallBackFunction function) {
-        if(function != null){
+        if (function != null) {
             function.onCallBack("DefaultHandler response data");
         }
     }

@@ -39,7 +39,7 @@ public abstract class WebUtils {
             //The webview is available and we can go back in its history
             view.goBack();
 
-            //call this function in a recursive way so we can go back to the root of the back history.
+            //call in a recursive way so we can go back to the root of the back history.
             backToRootHistory(view);
         }
     }
@@ -93,8 +93,9 @@ public abstract class WebUtils {
      * @return a String url with added parameters.
      */
     public static String addQueryParams(String url, Map<String, String> params) {
-        if(params == null)
+        if (params == null) {
             return url;
+        }
 
         try {
             String encodedUrl = URLEncoder.encode(url, WebConstants.UTF_8);
@@ -138,7 +139,8 @@ public abstract class WebUtils {
             Iterator it = params.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry) it.next();
-                url += WebConstants.PARAMETER_SEPARATOR + pair.getKey() + WebConstants.NAME_VALUE_SEPARATOR + pair.getValue();
+                url += WebConstants.PARAMETER_SEPARATOR + pair.getKey()
+                        + WebConstants.NAME_VALUE_SEPARATOR + pair.getValue();
 
                 //Avoids a ConcurrentModificationException.
                 it.remove();
@@ -149,7 +151,7 @@ public abstract class WebUtils {
     }
 
     /**
-     * Detect if the query is expecting parameters, ie already contains the "?" character and already
+     * Detect if the query is expecting parameters, ie already contains the ? character and already
      * has at least one parameter.
      *
      * @param url The url to analyze to know if it has parameters or not.

@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -38,6 +39,8 @@ public class WebViewPlus extends WebView implements WebViewJavascriptBridge {
 
     private long mUniqueId = 0;
 
+    private static final String TAG = WebViewPlus.class.getSimpleName();
+
     //endegion
 
 
@@ -56,7 +59,8 @@ public class WebViewPlus extends WebView implements WebViewJavascriptBridge {
     /**
      * Constructor that is called when inflating a view from XML.
      * This is called when a view is being constructed from an XML file,
-     * supplying attributes that were specified in the XML file. This version uses a default style of 0
+     * supplying attributes that were specified in the XML file.
+     * This version uses a default style of 0
      *
      * @param context The Context the view is running in.
      * @param attrs A collection of attributes, as found associated with a tag in an XML document.
@@ -67,12 +71,13 @@ public class WebViewPlus extends WebView implements WebViewJavascriptBridge {
 
     /**
      * Perform inflation from XML and apply a class-specific base style.
-     * This constructor of View allows subclasses to use their own base style when they are inflating.
+     * This constructor of View allows subclasses to use
+     * their own base style when they are inflating.
      *
      * @param context The Context the view is running in.
      * @param attrs A collection of attributes, as found associated with a tag in an XML document.
-     * @param defStyleAttr An attribute in the current theme that contains
-     *                     a reference to a style resource that supplies default values for the view.
+     * @param defStyleAttr An attribute in the current theme that contains a reference
+     *                     to a style resource that supplies default values for the view.
      */
     public WebViewPlus(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -156,7 +161,8 @@ public class WebViewPlus extends WebView implements WebViewJavascriptBridge {
             m.setData(data);
         }
         if (responseCallback != null) {
-            String callbackStr = String.format(BridgeUtils.CALLBACK_ID_FORMAT, ++mUniqueId + (WebConstants.UNDERLINE_CHARACTER + SystemClock.currentThreadTimeMillis()));
+            String callbackStr = String.format(BridgeUtils.CALLBACK_ID_FORMAT, ++mUniqueId
+                    + (WebConstants.UNDERLINE_CHARACTER + SystemClock.currentThreadTimeMillis()));
             mResponseCallbacks.put(callbackStr, responseCallback);
             m.setCallbackId(callbackStr);
         }
@@ -179,7 +185,9 @@ public class WebViewPlus extends WebView implements WebViewJavascriptBridge {
         //escape special characters for json string
         messageJson = messageJson.replaceAll("(\\\\)([^utrn])", "\\\\\\\\$1$2");
         messageJson = messageJson.replaceAll("(?<=[^\\\\])(\")", "\\\\\"");
-        String javascriptCommand = String.format(BridgeUtils.JS_HANDLE_MESSAGE_FROM_JAVA, messageJson);
+        String javascriptCommand = String.format(
+                BridgeUtils.JS_HANDLE_MESSAGE_FROM_JAVA, messageJson);
+
         if (Thread.currentThread() == Looper.getMainLooper().getThread()) {
             this.loadUrl(javascriptCommand);
         }
@@ -196,7 +204,7 @@ public class WebViewPlus extends WebView implements WebViewJavascriptBridge {
                     try {
                         list = Message.toArrayList(data);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.getStackTraceString(e);
                         return;
                     }
                     if (list == null || list.size() == 0) {

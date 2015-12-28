@@ -1,6 +1,7 @@
 package com.tlemansec.webviewplus.bridge.utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.webkit.WebView;
 
 import com.tlemansec.webviewplus.WebConstants;
@@ -19,13 +20,14 @@ public class BridgeUtils {
     //region Attributes
 
     public static final String YY_OVERRIDE_SCHEMA = "yy://";
-    public static final String YY_RETURN_DATA = YY_OVERRIDE_SCHEMA + "return/";//格式为   yy://return/{function}/returncontent
+    public static final String YY_RETURN_DATA = YY_OVERRIDE_SCHEMA + "return/";
     public static final String YY_FETCHQUEUE = YY_RETURN_DATA + "_fetchQueue/";
 
     public static final String CALLBACK_ID_FORMAT = "JAVA_CB_%s";
     public static final String JAVASCRIPT_STR = "javascript:";
     public static final String JAVASCRIPT_BRIDGE_STR = JAVASCRIPT_STR + "WebViewJavascriptBridge.";
-    public static final String JS_HANDLE_MESSAGE_FROM_JAVA = JAVASCRIPT_BRIDGE_STR + "_handleMessageFromNative('%s');";
+    public static final String JS_HANDLE_MESSAGE_FROM_JAVA =
+            JAVASCRIPT_BRIDGE_STR + "_handleMessageFromNative('%s');";
     public static final String JS_FETCH_QUEUE_FROM_JAVA = JAVASCRIPT_BRIDGE_STR + "_fetchQueue();";
 
     private static final String TAG = BridgeUtils.class.getSimpleName();
@@ -35,19 +37,19 @@ public class BridgeUtils {
 
     //region Utils
 
-    public static String parseFunctionName(String jsUrl){
+    public static String parseFunctionName(String jsUrl) {
         return jsUrl.replace(JAVASCRIPT_BRIDGE_STR, "").replaceAll("\\(.*\\);", "");
     }
 
     public static String getDataFromReturnUrl(String url) {
-        if(url.startsWith(YY_FETCHQUEUE)) {
+        if (url.startsWith(YY_FETCHQUEUE)) {
             return url.replace(YY_FETCHQUEUE, WebConstants.EMPTY_STR);
         }
 
         String temp = url.replace(YY_RETURN_DATA, WebConstants.EMPTY_STR);
         String[] functionAndData = temp.split(WebConstants.SPLIT_CHARACTER);
 
-        if(functionAndData.length >= 2) {
+        if (functionAndData.length >= 2) {
             StringBuilder sb = new StringBuilder();
             for (int i = 1; i < functionAndData.length; i++) {
                 sb.append(functionAndData[i]);
@@ -63,7 +65,7 @@ public class BridgeUtils {
         String temp = url.replace(YY_RETURN_DATA, WebConstants.EMPTY_STR);
         String[] functionAndData = temp.split(WebConstants.SPLIT_CHARACTER);
 
-        if(functionAndData.length >= 1){
+        if (functionAndData.length >= 1) {
             return functionAndData[0];
         }
 
@@ -75,7 +77,7 @@ public class BridgeUtils {
      * @param view
      * @param url
      */
-    public static void webViewLoadJs(WebView view, String url){
+    public static void webViewLoadJs(WebView view, String url) {
         String js = "var newscript = document.createElement(\"script\");";
         js += "newscript.src=\"" + url + "\";";
         js += "document.scripts[0].parentNode.insertBefore(newscript,document.scripts[0]);";
@@ -88,7 +90,7 @@ public class BridgeUtils {
      * @param view The webview in which we will load the JS file.
      * @param path The path to the file.
      */
-    public static void webViewLoadLocalJs(WebView view, String path){
+    public static void webViewLoadLocalJs(WebView view, String path) {
         //Read the file from the assets and get its content.
         String jsContent = assetFile2Str(view.getContext(), path);
 
@@ -96,9 +98,9 @@ public class BridgeUtils {
         view.loadUrl(JAVASCRIPT_STR + jsContent);
     }
 
-    public static String assetFile2Str(Context c, String urlStr){
+    public static String assetFile2Str(Context c, String urlStr) {
         InputStream in = null;
-        try{
+        try {
             in = c.getAssets().open(urlStr);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
             String line = null;
@@ -116,14 +118,14 @@ public class BridgeUtils {
             return sb.toString();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.getStackTraceString(e);
 
         } finally {
-            if(in != null) {
+            if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    //Do your job.
+                    Log.getStackTraceString(e);
                 }
             }
         }
