@@ -1,13 +1,13 @@
-# NavigationDrawerPlus
+# WebViewPlus
 
-[![Build Status](https://travis-ci.org/tlemansec/NavigationDrawerPlus.svg?branch=master)](https://travis-ci.org/tlemansec/NavigationDrawerPlus)
-![Maven Central](https://img.shields.io/maven-central/v/com.github.tlemansec/navigationdrawerplus.svg?style=flat)
+[![Build Status](https://travis-ci.org/tlemansec/WebViewPlus.svg?branch=master)](https://travis-ci.org/tlemansec/WebViewPlus)
+![Maven Central](https://img.shields.io/maven-central/v/com.github.tlemansec/webviewplus.svg?style=flat)
 
-NavigationDrawerPlus is an Android library to use the drawer layout with 2 possible menus and a content view.
+WebViewPlus is an Android library to use bridge with webview and follow the webview state.
 
 min sdk version = 14
 
-JavaDoc is available at: http://tlemansec.github.io/NavigationDrawerPlus/
+JavaDoc is available at: http://tlemansec.github.io/WebViewPlus/
 
 Contents
 --------
@@ -42,7 +42,7 @@ You can depend on the library through Maven:
 ```xml
 <dependency>
     <groupId>com.github.tlemansec</groupId>
-    <artifactId>navigationdrawerplus</artifactId>
+    <artifactId>webviewplus</artifactId>
     <version>0.0.1</version>
 </dependency>
 ```
@@ -51,7 +51,7 @@ or through Gradle:
 
 ```groovy
 dependencies {
-  compile 'com.github.tlemansec:navigationdrawerplus:0.0.1'
+  compile 'com.github.tlemansec:webviewplus:0.0.1'
 }
 ```
 
